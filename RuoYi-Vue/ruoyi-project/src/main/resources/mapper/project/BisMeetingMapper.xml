@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisMeetingMapper">
+
+    <resultMap type="BisMeeting" id="BisMeetingResult">
+        <result property="id"    column="id"    />
+        <result property="meetingTitle"    column="meeting_title"    />
+        <result property="meetingTime"    column="meeting_time"    />
+        <result property="meetingAddr"    column="meeting_addr"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="process"    column="process"    />
+        <result property="feedbackCode"    column="feedback_code"    />
+        <result property="content"    column="content"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="meetingEndTime"    column="meeting_end_time"    />
+        <result property="show"    column="show"    />
+        <result property="signUpEndTime"    column="sign_up_end_time"    />
+    </resultMap>
+
+    <sql id="selectBisMeetingVo">
+        select id, meeting_title, meeting_time, meeting_addr, lng, lat, process, feedback_code, content, del_flag, create_by, create_time, update_by, update_time,meeting_end_time,`show`,sign_up_end_time from bis_meeting
+    </sql>
+
+    <select id="selectBisMeetingList" parameterType="BisMeeting" resultMap="BisMeetingResult">
+        <include refid="selectBisMeetingVo"/>
+        <where>
+            <if test="meetingTitle != null  and meetingTitle != ''"> and meeting_title = #{meetingTitle}</if>
+            <if test="meetingTime != null "> and meeting_time = #{meetingTime}</if>
+            <if test="meetingEndTime != null "> and meeting_end_time = #{meetingEndTime}</if>
+            <if test="meetingAddr != null  and meetingAddr != ''"> and meeting_addr = #{meetingAddr}</if>
+            <if test="lng != null "> and lng = #{lng}</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="process != null  and process != ''"> and process = #{process}</if>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and feedback_code = #{feedbackCode}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+            <if test="show != null and show != ''">
+                and `show` = #{show}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisMeetingById" parameterType="Long" resultMap="BisMeetingResult">
+        <include refid="selectBisMeetingVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectBisMeetingListByUserId" resultType="com.ruoyi.project.domain.vo.BisMeetingVo">
+        select
+            DISTINCT
+            bm.id,
+            bm.meeting_title meetingTitle,
+            bm.meeting_time meetingTime,
+            bm.meeting_addr meetingAddr,
+            bm.lng,
+            bm.lat,
+            bm.process,
+            bm.feedback_code feedbackCode,
+            bm.content,
+            bm.create_time createTime,
+            bm.meeting_end_time meetingEndTime,
+            bm.sign_up_end_time signUpEndTime,
+			case ifnull(bsu.id,0)
+			when 0 then '1'
+			else
+			case ifnull(bsi.id,0)
+			when 0 then '2'
+			else '3'
+			end
+			end as state
+
+        from
+            bis_meeting bm left join bis_sign_up bsu on bm.id = bsu.meeting_id and bsu.uid = #{userId}
+            left join bis_sign_in bsi on bsu.uid = bsi.uid and bsi.uid = #{userId} and bsu.meeting_id = bsi.meeting_id
+            <if test="startDate != null">
+                and bsi.create_time > #{startDate}
+            </if>
+            where
+                 <if test="meetingId == null">
+                     bm.show = '1'  or bsu.id is not null or bm.id = #{currentMeetingId}
+                 </if>
+                <if test="meetingId != null">
+                     bm.id = #{meetingId}
+                </if>
+            order by createTime desc
+
+    </select>
+
+    <insert id="insertBisMeeting" parameterType="BisMeeting" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_meeting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="meetingTitle != null">meeting_title,</if>
+            <if test="meetingTime != null">meeting_time,</if>
+            <if test="meetingAddr != null">meeting_addr,</if>
+            <if test="lng != null">lng,</if>
+            <if test="lat != null">lat,</if>
+            <if test="process != null">process,</if>
+            <if test="feedbackCode != null">feedback_code,</if>
+            <if test="content != null">content,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="meetingEndTime != null">meeting_end_time,</if>
+            <if test="show != null">`show`,</if>
+            <if test="signUpEndTime != null">sign_up_end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="meetingTitle != null">#{meetingTitle},</if>
+            <if test="meetingTime != null">#{meetingTime},</if>
+            <if test="meetingAddr != null">#{meetingAddr},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="process != null">#{process},</if>
+            <if test="feedbackCode != null">#{feedbackCode},</if>
+            <if test="content != null">#{content},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="meetingEndTime != null">#{meetingEndTime},</if>
+            <if test="show != null">#{show},</if>
+            <if test="signUpEndTime != null">#{signUpEndTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisMeeting" parameterType="BisMeeting">
+        update bis_meeting
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="meetingTitle != null">meeting_title = #{meetingTitle},</if>
+            <if test="meetingTime != null">meeting_time = #{meetingTime},</if>
+            <if test="meetingEndTime != null">meeting_end_time = #{meetingEndTime},</if>
+            <if test="meetingAddr != null">meeting_addr = #{meetingAddr},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="process != null">process = #{process},</if>
+            <if test="feedbackCode != null">feedback_code = #{feedbackCode},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="show != null">`show` = #{show},</if>
+            <if test="signUpEndTime != null">sign_up_end_time = #{signUpEndTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisMeetingById" parameterType="Long">
+        delete from bis_meeting where id = #{id}
+    </delete>
+
+    <delete id="deleteBisMeetingByIds" parameterType="String">
+        delete from bis_meeting where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

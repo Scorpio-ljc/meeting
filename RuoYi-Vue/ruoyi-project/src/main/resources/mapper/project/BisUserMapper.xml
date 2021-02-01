@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisUserMapper">
+
+    <resultMap type="BisUser" id="BisUserResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="position"    column="position"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="email"    column="email"    />
+        <result property="openid"    column="openid"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisUserVo">
+        select id, name, mobile, card_id, position, org_name, email, openid, del_flag, create_by, create_time, update_by, update_time from bis_user
+    </sql>
+
+    <select id="selectBisUserList" parameterType="BisUser" resultMap="BisUserResult">
+        <include refid="selectBisUserVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="cardId != null  and cardId != ''"> and card_id = #{cardId}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisUserById" parameterType="Long" resultMap="BisUserResult">
+        <include refid="selectBisUserVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBisUser" parameterType="BisUser" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="mobile != null and mobile != ''">mobile,</if>
+            <if test="cardId != null">card_id,</if>
+            <if test="position != null">position,</if>
+            <if test="orgName != null">org_name,</if>
+            <if test="email != null">email,</if>
+            <if test="openid != null">openid,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="mobile != null and mobile != ''">#{mobile},</if>
+            <if test="cardId != null">#{cardId},</if>
+            <if test="position != null">#{position},</if>
+            <if test="orgName != null">#{orgName},</if>
+            <if test="email != null">#{email},</if>
+            <if test="openid != null">#{openid},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisUser" parameterType="BisUser">
+        update bis_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="orgName != null">org_name = #{orgName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="openid != null">openid = #{openid},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisUserById" parameterType="Long">
+        delete from bis_user where id = #{id}
+    </delete>
+
+    <delete id="deleteBisUserByIds" parameterType="String">
+        delete from bis_user where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="getByOpenid" resultMap="BisUserResult">
+        <include refid="selectBisUserVo"/>
+        where
+        openid = #{openid}
+    </select>
+
+</mapper>

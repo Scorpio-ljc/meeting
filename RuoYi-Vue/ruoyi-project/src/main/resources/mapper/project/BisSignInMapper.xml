@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisSignInMapper">
+
+    <resultMap type="BisSignIn" id="BisSignInResult">
+        <result property="id"    column="id"    />
+        <result property="uid"    column="uid"    />
+        <result property="meetingId"    column="meeting_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisSignInVo">
+        select id, uid, meeting_id, del_flag, create_by, create_time, update_by, update_time from bis_sign_in
+    </sql>
+
+    <select id="selectBisSignInList" parameterType="BisSignIn" resultMap="BisSignInResult">
+        <include refid="selectBisSignInVo"/>
+        <where>
+            <if test="uid != null "> and uid = #{uid}</if>
+            <if test="meetingId != null "> and meeting_id = #{meetingId}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisSignInById" parameterType="Long" resultMap="BisSignInResult">
+        <include refid="selectBisSignInVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBisSignIn" parameterType="BisSignIn" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_sign_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uid != null">uid,</if>
+            <if test="meetingId != null">meeting_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uid != null">#{uid},</if>
+            <if test="meetingId != null">#{meetingId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisSignIn" parameterType="BisSignIn">
+        update bis_sign_in
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="meetingId != null">meeting_id = #{meetingId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisSignInById" parameterType="Long">
+        delete from bis_sign_in where id = #{id}
+    </delete>
+
+    <delete id="deleteBisSignInByIds" parameterType="String">
+        delete from bis_sign_in where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectByMeetingIdAndUid" resultMap="BisSignInResult">
+        <include refid="selectBisSignInVo"/>
+        where
+        meeting_id = #{meetingId} and uid = #{uid}
+    </select>
+    <select id="selectBisSignInVoList" resultType="com.ruoyi.project.domain.vo.BisSignInVo">
+        select
+            bsi.id,
+            bsu.uid,
+            bsu.`name`,
+            bsu.mobile,
+            bsu.meeting_id as meetingId,
+            bsu.meeting_title as meetingTitle,
+            bsu.card_id as cardId,
+            bsu.`position`,
+            bsu.org_name as orgName,
+            bsu.email,
+            bs.openid,
+            bsu.state,
+            bsi.create_time as createTime,
+            bm.meeting_time meetingTime,
+            bm.meeting_end_time meetingEndTime
+        from
+            bis_sign_in bsi
+        left join bis_sign_up bsu on bsi.uid = bsu.uid and bsi.meeting_id = bsu.meeting_id
+        left join bis_meeting bm on bsi.meeting_id = bm.id
+        left join bis_user bs on bsu.uid = bs.id
+        <where>
+            <if test="meetingId != null">
+                 bsi.meeting_id = #{meetingId}
+            </if>
+            <if test="meetingTitle != null and meetingTitle != ''">
+                and bsu.meeting_title like concat('%',#{meetingTitle},'%')
+            </if>
+            <if test="orgName != null and orgName != ''">
+                and bsu.org_name like concat('%',#{orgName},'%')
+            </if>
+        </where>
+        order by createTime desc
+
+    </select>
+
+</mapper>

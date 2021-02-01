@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisSubjectMapper">
+
+    <resultMap type="BisSubject" id="BisSubjectResult">
+        <result property="id"    column="id"    />
+        <result property="feedbackCode"    column="feedback_code"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="key"    column="key"    />
+        <result property="value"    column="value"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisSubjectVo">
+        select id, feedback_code, subject_id, `key`, `value`, del_flag, create_by, create_time, update_by, update_time from bis_subject
+    </sql>
+
+    <select id="selectBisSubjectList" parameterType="BisSubject" resultMap="BisSubjectResult">
+        <include refid="selectBisSubjectVo"/>
+        <where>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and feedback_code = #{feedbackCode}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="key != null  and key != ''"> and key = #{key}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisSubjectById" parameterType="Long" resultMap="BisSubjectResult">
+        <include refid="selectBisSubjectVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBisSubject" parameterType="BisSubject" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">feedback_code,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="key != null">key,</if>
+            <if test="value != null">value,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">#{feedbackCode},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="key != null">#{key},</if>
+            <if test="value != null">#{value},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisSubject" parameterType="BisSubject">
+        update bis_subject
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="feedbackCode != null">feedback_code = #{feedbackCode},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="key != null">key = #{key},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisSubjectById" parameterType="Long">
+        delete from bis_subject where id = #{id}
+    </delete>
+
+    <delete id="deleteBisSubjectByIds" parameterType="String">
+        delete from bis_subject where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByFeedbackCode">
+        delete from bis_subject where feedback_code = #{feedbackCode}
+    </delete>
+    <select id="getBySubjectId" resultMap="BisSubjectResult">
+
+        <include refid="selectBisSubjectVo"/>
+        where
+        subject_id = #{subjectId}
+
+    </select>
+    <select id="selectBisSubjectVoList" resultType="com.ruoyi.project.domain.vo.BisSubjectVo">
+        select
+            bs.id,
+            bs.feedback_code feedbackCode,
+            bs.subject_id subjectId,
+            bs.`key`,
+            bs.`value`,
+            bs.del_flag delFlag,
+            bs.create_by createBy,
+            bs.create_time createTime,
+            bs.update_by updateBy,
+            bs.update_time updateTime,
+            bft.subject
+        from bis_subject bs left join bis_feedback_template bft on bs.subject_id = bft.id
+
+        <where>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and bs.feedback_code = #{feedbackCode}</if>
+            <if test="subjectId != null "> and bs.subject_id = #{subjectId}</if>
+            <if test="key != null  and key != ''"> and bs.key = #{key}</if>
+            <if test="value != null  and value != ''"> and bs.value = #{value}</if>
+            <if test="startTime != null">
+                and bs.create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and bs.create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by createTime desc
+    </select>
+    <insert id="addList">
+        insert into bis_subject
+        (
+        feedback_code,
+        subject_id,
+       `key`,
+        `value`,
+       create_by,
+        create_time
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+               (
+               #{item.feedbackCode},
+               #{item.subjectId},
+                #{item.key},
+                #{item.value},
+                #{item.createBy},
+                #{item.createTime}
+                )
+        </foreach>
+
+    </insert>
+
+
+</mapper>

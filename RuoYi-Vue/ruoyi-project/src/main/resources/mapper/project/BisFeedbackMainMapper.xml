@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisFeedbackMainMapper">
+
+    <resultMap type="BisFeedbackMain" id="BisFeedbackMainResult">
+        <result property="id"    column="id"    />
+        <result property="feedbackCode"    column="feedback_code"    />
+        <result property="templateName"    column="template_name"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisFeedbackMainVo">
+        select id, feedback_code, template_name, del_flag, create_by, create_time, update_by, update_time from bis_feedback_main
+    </sql>
+
+    <select id="selectBisFeedbackMainList" parameterType="BisFeedbackMain" resultMap="BisFeedbackMainResult">
+        <include refid="selectBisFeedbackMainVo"/>
+        <where>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and feedback_code = #{feedbackCode}</if>
+            <if test="templateName != null  and templateName != ''"> and template_name like concat('%', #{templateName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBisFeedbackMainById" parameterType="Long" resultMap="BisFeedbackMainResult">
+        <include refid="selectBisFeedbackMainVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectBisFeedbackMainByCode" resultMap="BisFeedbackMainResult">
+        <include refid="selectBisFeedbackMainVo"/>
+        where
+        feedback_code = #{feedbackCode}
+    </select>
+
+    <insert id="insertBisFeedbackMain" parameterType="BisFeedbackMain" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_feedback_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">feedback_code,</if>
+            <if test="templateName != null">template_name,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">#{feedbackCode},</if>
+            <if test="templateName != null">#{templateName},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisFeedbackMain" parameterType="BisFeedbackMain">
+        update bis_feedback_main
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateName != null">template_name = #{templateName},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id} or feedback_code = #{feedbackCode}
+    </update>
+
+    <delete id="deleteBisFeedbackMainById" parameterType="Long">
+        delete from bis_feedback_main where id = #{id}
+    </delete>
+
+    <delete id="deleteBisFeedbackMainByIds" parameterType="String">
+        delete from bis_feedback_main where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteBisFeedbackMainByCode">
+        delete from bis_feedback_main where feedback_code = #{feedbackCode}
+    </delete>
+
+</mapper>

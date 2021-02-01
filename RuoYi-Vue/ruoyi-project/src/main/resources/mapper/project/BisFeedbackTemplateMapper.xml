@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisFeedbackTemplateMapper">
+
+    <resultMap type="BisFeedbackTemplate" id="BisFeedbackTemplateResult">
+        <result property="id"    column="id"    />
+        <result property="feedbackCode"    column="feedback_code"    />
+        <result property="subject"    column="subject"    />
+        <result property="subjectType"    column="subject_type"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisFeedbackTemplateVo">
+        select id, feedback_code, subject, subject_type, del_flag, create_by, create_time, update_by, update_time from bis_feedback_template
+    </sql>
+
+    <select id="selectBisFeedbackTemplateList" parameterType="BisFeedbackTemplate" resultMap="BisFeedbackTemplateResult">
+        <include refid="selectBisFeedbackTemplateVo"/>
+        <where>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and feedback_code = #{feedbackCode}</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+            <if test="subjectType != null  and subjectType != ''"> and subject_type = #{subjectType}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisFeedbackTemplateById" parameterType="Long" resultMap="BisFeedbackTemplateResult">
+        <include refid="selectBisFeedbackTemplateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBisFeedbackTemplate" parameterType="BisFeedbackTemplate" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_feedback_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">feedback_code,</if>
+            <if test="subject != null">subject,</if>
+            <if test="subjectType != null">subject_type,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null">#{feedbackCode},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="subjectType != null">#{subjectType},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisFeedbackTemplate" parameterType="BisFeedbackTemplate">
+        update bis_feedback_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="feedbackCode != null">feedback_code = #{feedbackCode},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="subjectType != null">subject_type = #{subjectType},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisFeedbackTemplateById" parameterType="Long">
+        delete from bis_feedback_template where id = #{id}
+    </delete>
+
+    <delete id="deleteBisFeedbackTemplateByIds" parameterType="String">
+        delete from bis_feedback_template where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByFeedbackCode">
+        delete from bis_feedback_template where feedback_code = #{feedbackCode}
+    </delete>
+
+
+    <select id="getByFeedbackCode" resultMap="BisFeedbackTemplateResult">
+        <include refid="selectBisFeedbackTemplateVo"/>
+        where
+        feedback_code = #{feedbackCode}
+    </select>
+
+</mapper>

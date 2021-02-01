@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.BisUserFeedbackMapper">
+
+    <resultMap type="BisUserFeedback" id="BisUserFeedbackResult">
+        <result property="id"    column="id"    />
+        <result property="feedbackCode"    column="feedback_code"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="uid"    column="uid"    />
+        <result property="meetingId"    column="meeting_id"    />
+        <result property="key"    column="key"    />
+        <result property="value"    column="value"    />
+        <result property="picking"    column="picking"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBisUserFeedbackVo">
+        select id, feedback_code, subject_id, uid, meeting_id, `key`, `value`, picking, del_flag, create_by, create_time, update_by, update_time from bis_user_feedback
+    </sql>
+
+    <select id="selectBisUserFeedbackList" parameterType="BisUserFeedback" resultMap="BisUserFeedbackResult">
+        <include refid="selectBisUserFeedbackVo"/>
+        <where>
+            <if test="feedbackCode != null  and feedbackCode != ''"> and feedback_code = #{feedbackCode}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="uid != null "> and uid = #{uid}</if>
+            <if test="meetingId != null "> and meeting_id = #{meetingId}</if>
+            <if test="key != null  and key != ''"> and key = #{key}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="picking != null  and picking != ''"> and picking = #{picking}</if>
+            <if test="startTime != null">
+                and create_time > #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <#{endTime}]]>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBisUserFeedbackById" parameterType="Long" resultMap="BisUserFeedbackResult">
+        <include refid="selectBisUserFeedbackVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBisUserFeedback" parameterType="BisUserFeedback" useGeneratedKeys="true" keyProperty="id">
+        insert into bis_user_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null and feedbackCode != ''">feedback_code,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="uid != null">uid,</if>
+            <if test="meetingId != null">meeting_id,</if>
+            <if test="key != null">`key`,</if>
+            <if test="value != null">`value`,</if>
+            <if test="picking != null">picking,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackCode != null and feedbackCode != ''">#{feedbackCode},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="uid != null">#{uid},</if>
+            <if test="meetingId != null">#{meetingId},</if>
+            <if test="key != null">#{key},</if>
+            <if test="value != null">#{value},</if>
+            <if test="picking != null">#{picking},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBisUserFeedback" parameterType="BisUserFeedback">
+        update bis_user_feedback
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="feedbackCode != null and feedbackCode != ''">feedback_code = #{feedbackCode},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="meetingId != null">meeting_id = #{meetingId},</if>
+            <if test="key != null">key = #{key},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="picking != null">picking = #{picking},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBisUserFeedbackById" parameterType="Long">
+        delete from bis_user_feedback where id = #{id}
+    </delete>
+
+    <delete id="deleteBisUserFeedbackByIds" parameterType="String">
+        delete from bis_user_feedback where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectUserFeedbackVo" resultType="com.ruoyi.project.domain.vo.BisUserFeedbackVo">
+        select
+             bft.subject,
+             buf.subject_id subjectId,
+             buf.uid,
+             buf.meeting_id meetingId,
+             buf.`key`,
+             buf.`value`
+        from bis_user_feedback buf left join bis_feedback_template bft on buf.subject_id = bft.id
+            where meeting_id = #{meetingId} and picking = '1'
+    </select>
+    <select id="selectCountByUserIdAndMeetingId" resultType="java.lang.Integer">
+        select
+            count(1)
+        from
+            bis_user_feedback
+        where
+            del_flag = '0' and uid=#{userId} and meeting_id = #{meetingId}
+    </select>
+
+</mapper>
