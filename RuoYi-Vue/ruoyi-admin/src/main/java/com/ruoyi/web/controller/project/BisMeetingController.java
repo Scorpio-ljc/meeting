@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.project;
 import java.util.List;
 
 import com.ruoyi.common.annotation.AnonymousAccess;
+import com.ruoyi.common.annotation.RepeatSubmit;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,7 @@ public class BisMeetingController extends BaseController
      */
     @ApiOperation("新增会议信息")
     @Log(title = "会议信息", businessType = BusinessType.INSERT)
+    @RepeatSubmit
     @PostMapping("/addMeeting")
     public AjaxResult addMeeting(@RequestBody BisMeeting bisMeeting)
     {

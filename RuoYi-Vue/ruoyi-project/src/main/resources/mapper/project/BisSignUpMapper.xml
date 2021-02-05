@@ -22,10 +22,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="idCardNeed"    column="id_card_need"    />
+        <result property="foodNeed"    column="food_need"    />
+        <result property="stayNeed"    column="stay_need"    />
     </resultMap>
 
     <sql id="selectBisSignUpVo">
-        select id, uid, `name`, mobile, meeting_id, meeting_title, card_id, `position`, org_name, email, openid,state, del_flag, create_by, create_time, update_by, update_time from bis_sign_up
+        select id, uid, `name`, mobile, meeting_id, meeting_title, card_id, `position`, org_name, email, openid,state, del_flag, create_by, create_time, update_by, update_time, id_card_need, food_need, stay_need from bis_sign_up
     </sql>
 
     <select id="selectBisSignUpList" parameterType="BisSignUp" resultMap="BisSignUpResult">
@@ -75,6 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="idCardNeed != null">id_card_need,</if>
+            <if test="foodNeed != null">food_need,</if>
+            <if test="stayNeed != null">stay_need,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="uid != null">#{uid},</if>
@@ -93,6 +99,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="idCardNeed != null">#{idCardNeed},</if>
+            <if test="foodNeed != null">#{foodNeed},</if>
+            <if test="stayNeed != null">#{stayNeed},</if>
          </trim>
     </insert>
 
@@ -115,6 +124,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="idCardNeed != null">id_card_need = #{idCardNeed},</if>
+            <if test="foodNeed != null">food_need = #{foodNeed},</if>
+            <if test="stayNeed != null">stay_need = #{stayNeed},</if>
         </trim>
         where id = #{id}
     </update>

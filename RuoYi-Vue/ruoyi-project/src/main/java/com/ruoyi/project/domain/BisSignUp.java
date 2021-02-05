@@ -66,6 +66,13 @@ public class BisSignUp extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    @Excel(name = "是否需要身份证")
+    private String idCardNeed;
+    @Excel(name = "是否需要伙食")
+    private String foodNeed;
+    @Excel(name = "是否需要住宿")
+    private String stayNeed;
+
     public void setId(Long id)
     {
         this.id = id;
@@ -183,6 +190,30 @@ public class BisSignUp extends BaseEntity
         this.state = state;
     }
 
+    public String getIdCardNeed() {
+        return idCardNeed;
+    }
+
+    public void setIdCardNeed(String idCardNeed) {
+        this.idCardNeed = idCardNeed;
+    }
+
+    public String getFoodNeed() {
+        return foodNeed;
+    }
+
+    public void setFoodNeed(String foodNeed) {
+        this.foodNeed = foodNeed;
+    }
+
+    public String getStayNeed() {
+        return stayNeed;
+    }
+
+    public void setStayNeed(String stayNeed) {
+        this.stayNeed = stayNeed;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -203,6 +234,9 @@ public class BisSignUp extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("idCardNeed",getIdCardNeed())
+            .append("foodNeed",getFoodNeed())
+            .append("stayNeed",getStayNeed())
             .toString();
     }
 }

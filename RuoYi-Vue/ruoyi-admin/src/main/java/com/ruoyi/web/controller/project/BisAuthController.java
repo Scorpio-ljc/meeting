@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.project;
 
 import com.ruoyi.common.annotation.AnonymousAccess;
+import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -55,6 +56,7 @@ public class BisAuthController extends BaseController {
         return AjaxResult.success(map);
     }
     @ApiOperation("新增后端普通管理员")
+    @RepeatSubmit
     @PostMapping("/addUser")
     public AjaxResult addUser(@RequestBody SysUser user){
         if(StringUtils.isEmpty(user.getUserName()) || StringUtils.isEmpty(user.getPassword())){

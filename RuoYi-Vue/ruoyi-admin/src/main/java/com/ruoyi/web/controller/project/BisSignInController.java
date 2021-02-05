@@ -44,6 +44,7 @@ public class BisSignInController extends BaseController
      */
     @ApiOperation("查询签到信息列表")
     @GetMapping("/querySignInList")
+    @AnonymousAccess
     public TableDataInfo list(BisSignInVo bisSignInVo)
     {
         startPage();

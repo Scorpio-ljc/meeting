@@ -2,6 +2,7 @@ package com.ruoyi.api.controller;
 
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.ruoyi.common.annotation.AnonymousAccess;
+import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.core.bean.UserContext;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -39,6 +40,7 @@ public class MeetingController extends BaseController {
      * @param bisUserVo 用户vo
      * @return 结果
      */
+    @RepeatSubmit
     @PostMapping("/signUp")
     public AjaxResult signUp(@RequestBody BisUserVo bisUserVo){
         bisUserVo.setUid(UserContext.get().getUid());
@@ -52,6 +54,7 @@ public class MeetingController extends BaseController {
      * @param signInVo 签到vo
      * @return 结果
      */
+    @RepeatSubmit
     @PostMapping("/signIn")
     public AjaxResult signIn(@RequestBody SignInVo signInVo){
         signInVo.setUid(UserContext.get().getUid());

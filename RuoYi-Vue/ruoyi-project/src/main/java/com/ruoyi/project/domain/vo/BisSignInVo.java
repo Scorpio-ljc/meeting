@@ -55,8 +55,8 @@ public class BisSignInVo extends BisSignIn {
     @Excel(name = "会议结束时间",width = 30, dateFormat = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date meetingEndTime;
-    /** 报名时间 */
+    /** 签到时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "报名时间",width = 30, dateFormat = "yyyy-MM-dd HH:mm")
+    @Excel(name = "签到时间",width = 30, dateFormat = "yyyy-MM-dd HH:mm")
     private Date createTime;
 }

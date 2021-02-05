@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.project;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.project.domain.BisFeedbackMain;
 import com.ruoyi.project.domain.vo.BisFeedbackTemplateDetailVo;
 import com.ruoyi.project.domain.vo.BisFeedbackTemplateVo;
@@ -81,6 +82,7 @@ public class BisFeedbackTemplateController extends BaseController
      */
     @ApiOperation("新增反馈模版")
     @Log(title = "反馈模版", businessType = BusinessType.INSERT)
+    @RepeatSubmit
     @PostMapping("/addFeedback")
     public AjaxResult addFeedback(@RequestBody BisFeedbackTemplateDetailVo bisFeedbackTemplateDetailVo)
     {

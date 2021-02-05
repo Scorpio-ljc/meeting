@@ -70,6 +70,12 @@ public class BisMeeting extends BaseEntity
     @Excel(name = "报名截止时间",width = 30, dateFormat = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date signUpEndTime;
+    @Excel(name = "是否需要身份证")
+    private String idCardNeed;
+    @Excel(name = "是否需要伙食")
+    private String foodNeed;
+    @Excel(name = "是否需要住宿")
+    private String stayNeed;
 
     public void setId(Long id)
     {
@@ -186,6 +192,30 @@ public class BisMeeting extends BaseEntity
         this.signUpEndTime = signUpEndTime;
     }
 
+    public String getIdCardNeed() {
+        return idCardNeed;
+    }
+
+    public void setIdCardNeed(String idCardNeed) {
+        this.idCardNeed = idCardNeed;
+    }
+
+    public String getFoodNeed() {
+        return foodNeed;
+    }
+
+    public void setFoodNeed(String foodNeed) {
+        this.foodNeed = foodNeed;
+    }
+
+    public String getStayNeed() {
+        return stayNeed;
+    }
+
+    public void setStayNeed(String stayNeed) {
+        this.stayNeed = stayNeed;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -206,6 +236,9 @@ public class BisMeeting extends BaseEntity
             .append("meetingEndTime", getMeetingEndTime())
             .append("show", getShow())
             .append("signUpEndTime", getSignUpEndTime())
+            .append("idCardNeed",getIdCardNeed())
+            .append("foodNeed",getFoodNeed())
+            .append("stayNeed",getStayNeed())
             .toString();
     }
 }

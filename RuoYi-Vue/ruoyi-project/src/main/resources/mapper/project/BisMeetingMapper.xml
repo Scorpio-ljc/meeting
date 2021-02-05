@@ -22,10 +22,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="meetingEndTime"    column="meeting_end_time"    />
         <result property="show"    column="show"    />
         <result property="signUpEndTime"    column="sign_up_end_time"    />
+        <result property="idCardNeed"    column="id_card_need"    />
+        <result property="foodNeed"    column="food_need"    />
+        <result property="stayNeed"    column="stay_need"    />
     </resultMap>
 
     <sql id="selectBisMeetingVo">
-        select id, meeting_title, meeting_time, meeting_addr, lng, lat, process, feedback_code, content, del_flag, create_by, create_time, update_by, update_time,meeting_end_time,`show`,sign_up_end_time from bis_meeting
+        select id, meeting_title, meeting_time, meeting_addr, lng, lat, process, feedback_code, content
+             , del_flag, create_by, create_time, update_by, update_time,meeting_end_time,`show`
+             ,sign_up_end_time, id_card_need, food_need, stay_need
+        from bis_meeting
     </sql>
 
     <select id="selectBisMeetingList" parameterType="BisMeeting" resultMap="BisMeetingResult">
@@ -72,6 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bm.create_time createTime,
             bm.meeting_end_time meetingEndTime,
             bm.sign_up_end_time signUpEndTime,
+            bm.id_card_need idCardNeed,
+            bm.food_need foodNeed,
+            bm.stay_need stayNeed,
 			case ifnull(bsu.id,0)
 			when 0 then '1'
 			else
@@ -117,6 +126,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meetingEndTime != null">meeting_end_time,</if>
             <if test="show != null">`show`,</if>
             <if test="signUpEndTime != null">sign_up_end_time,</if>
+            <if test="idCardNeed != null">id_card_need,</if>
+            <if test="foodNeed != null">food_need,</if>
+            <if test="stayNeed != null">stay_need,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="meetingTitle != null">#{meetingTitle},</if>
@@ -135,6 +147,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meetingEndTime != null">#{meetingEndTime},</if>
             <if test="show != null">#{show},</if>
             <if test="signUpEndTime != null">#{signUpEndTime},</if>
+            <if test="idCardNeed != null">#{idCardNeed},</if>
+            <if test="foodNeed != null">#{foodNeed},</if>
+            <if test="stayNeed != null">#{stayNeed},</if>
          </trim>
     </insert>
 
@@ -157,6 +172,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="show != null">`show` = #{show},</if>
             <if test="signUpEndTime != null">sign_up_end_time = #{signUpEndTime},</if>
+            <if test="idCardNeed != null">id_card_need = #{idCardNeed},</if>
+            <if test="foodNeed != null">food_need = #{foodNeed},</if>
+            <if test="stayNeed != null">stay_need = #{stayNeed},</if>
         </trim>
         where id = #{id}
     </update>

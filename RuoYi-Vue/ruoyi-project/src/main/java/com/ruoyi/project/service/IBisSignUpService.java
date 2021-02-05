@@ -3,6 +3,7 @@ package com.ruoyi.project.service;
 import java.util.List;
 import com.ruoyi.project.domain.BisSignUp;
 import com.ruoyi.project.domain.vo.BisSignUpExcelVo;
+import com.ruoyi.project.domain.vo.BisSignUpVo;
 import com.ruoyi.project.domain.vo.BisUserVo;
 
 /**
