@@ -123,6 +123,9 @@ public class BisSignUpServiceImpl implements IBisSignUpService {
         BeanUtils.copyProperties(bisUserVo, bisSignUp);
         bisSignUp.setUid(bisUserVo.getUid());
         bisSignUp.setMeetingTitle(bisMeeting.getMeetingTitle());
+        bisSignUp.setIdCardNeed(bisMeeting.getIdCardNeed());
+        bisSignUp.setFoodNeed(bisMeeting.getFoodNeed());
+        bisSignUp.setStayNeed(bisMeeting.getStayNeed());
         bisSignUp.setCreateTime(DateUtils.getNowDate());
         bisSignUpMapper.insertBisSignUp(bisSignUp);
         return true;

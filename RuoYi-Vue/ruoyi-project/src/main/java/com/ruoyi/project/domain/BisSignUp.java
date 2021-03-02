@@ -66,11 +66,11 @@ public class BisSignUp extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    @Excel(name = "是否需要身份证")
+    @Excel(name = "是否需要身份证",readConverterExp="0=否,1=是")
     private String idCardNeed;
-    @Excel(name = "是否需要伙食")
+    @Excel(name = "是否需要伙食",readConverterExp="0=否,1=是")
     private String foodNeed;
-    @Excel(name = "是否需要住宿")
+    @Excel(name = "是否需要住宿",readConverterExp="0=否,1=是")
     private String stayNeed;
 
     public void setId(Long id)
